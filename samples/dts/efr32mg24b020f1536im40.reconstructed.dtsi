@@ -1,0 +1,28 @@
+
+
+
+
+
+
+#include <mem.h>
+#include <silabs/efr32mg24.dtsi>
+
+/ {
+    sram0: memory@20000000 {
+        reg = <536870912 DT_SIZE_K(256)>;
+
+    };
+
+    soc {
+        compatible = "silabs,efr32mg24b020f1536im40", "silabs,efr32mg24", "silabs,efr32", "simple-bus";
+
+    };
+
+};
+
+
+
+&flash0 {
+    reg = <134217728 DT_SIZE_K(1536)>;
+
+};

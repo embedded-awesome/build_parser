@@ -1,0 +1,10 @@
+name: Build converter
+
+blueprints:
+  test_convert:
+    depends:
+    process:
+      - template:
+          template_file: templates/yaml_to_dts.template
+          data_file: samples/dts/efr32mg.dtsi.yaml
+      - save: '{{curdir()}}/samples/dts/efr32mg.yakka.dtsi'

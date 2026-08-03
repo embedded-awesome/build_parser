@@ -1,0 +1,112 @@
+{#
+  Reconstructs DTS/DTSI text from build_converter semantic YAML payload.
+  Expected input variable: payload (the document's `data` mapping).
+#}
+{% macro render_cell(item) %}
+{% if item is string %}{{ item }}{% elif item is boolean %}{{ 1 if item else 0 }}{% elif item is none %}0{% else %}{{ item }}{% endif %}
+{% endmacro %}
+
+{% macro render_property(prop, indent) %}
+{% set ptype = prop.type %}
+{% set value = prop.value %}
+{% if ptype in ['empty', 'boolean'] and (value is none or value is sameas true) %}
+{{ indent }}{{ prop.name }};
+{% elif ptype == 'string' and value is string %}
+{{ indent }}{{ prop.name }} = "{{ value }}";
+{% elif ptype == 'strings' and value is iterable and value is not string %}
+{{ indent }}{{ prop.name }} = {% for item in value %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %};
+{% elif ptype == 'num' and value is not string %}
+{{ indent }}{{ prop.name }} = <{{ value }}>;
+{% elif ptype == 'nums' and value is iterable and value is not string %}
+{{ indent }}{{ prop.name }} = <{% for item in value %}{{ render_cell(item) }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{% elif ptype == 'path' and value is string and value.startswith('/') %}
+{{ indent }}{{ prop.name }} = <&{{ '{' }}{{ value }}{{ '}' }}>;
+{% elif ptype == 'phandle' and value is string and value.startswith('/') %}
+{{ indent }}{{ prop.name }} = <&{{ '{' }}{{ value }}{{ '}' }}>;
+{% elif ptype == 'phandles' and value is iterable and value is not string %}
+{{ indent }}{{ prop.name }} = <{% for item in value %}&{{ '{' }}{{ item }}{{ '}' }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{% elif value is mapping and value.get('type') in ['bytes', 'compound', 'raw'] and value.get('hex') is string %}
+{{ indent }}{{ prop.name }} = {{ format_bytes_hex(value.get('hex')) }};
+{% elif value is none %}
+{{ indent }}{{ prop.name }};
+{% else %}
+{{ indent }}{{ prop.name }} = /* unsupported conversion */ "{{ value }}";
+{% endif %}
+{% endmacro %}
+
+{% macro node_labels(node) %}
+{% if node.labels %}{% for label in node.labels %}{{ label }}: {% endfor %}{% endif %}
+{% endmacro %}
+
+{% macro render_node(node, all_nodes, indent) %}
+{% if node.path == '/' %}
+{{ indent }}/ {
+{% else %}
+{{ indent }}{{ node_labels(node) }}{{ node.name }} {
+{% endif %}
+{% for prop in node.properties %}
+{{ render_property(prop, indent ~ '    ') }}
+{% endfor %}
+{% for child_path in node.children %}
+{% set ns = namespace(child=None) %}
+{% for candidate in all_nodes %}
+{% if candidate.path == child_path %}{% set ns.child = candidate %}{% endif %}
+{% endfor %}
+{% if ns.child %}
+{{ render_node(ns.child, all_nodes, indent ~ '    ') }}
+{% endif %}
+{% endfor %}
+{{ indent }}};
+{% endmacro %}
+
+{% macro render_fragment_node(node, indent) %}
+{% for prop_name, prop in node.properties.items() %}
+{% set ptype = prop.type %}
+{% set value = prop.value %}
+{% if ptype in ['empty', 'boolean'] and (value is none or value is sameas true) %}
+{{ indent }}{{ prop_name }};
+{% elif ptype == 'string' and value is string %}
+{{ indent }}{{ prop_name }} = "{{ value }}";
+{% elif ptype == 'strings' and value is iterable and value is not string %}
+{{ indent }}{{ prop_name }} = {% for item in value %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %};
+{% elif ptype == 'num' and value is not string %}
+{{ indent }}{{ prop_name }} = <{{ value }}>;
+{% elif ptype == 'nums' and value is iterable and value is not string %}
+{{ indent }}{{ prop_name }} = <{% for item in value %}{{ render_cell(item) }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{% elif value is mapping and value.get('type') in ['bytes', 'compound', 'raw'] and value.get('hex') is string %}
+{{ indent }}{{ prop_name }} = {{ format_bytes_hex(value.get('hex')) }};
+{% elif value is none %}
+{{ indent }}{{ prop_name }};
+{% else %}
+{{ indent }}{{ prop_name }} = /* unsupported conversion */ "{{ value }}";
+{% endif %}
+{% endfor %}
+{% for child in node.children %}
+{{ indent }}{{ child.name }} {
+{{ render_fragment_node(child, indent ~ '    ') }}
+{{ indent }}};
+{% endfor %}
+{% endmacro %}
+
+{% set source = payload.get('source', {}) %}
+{% set unresolved_refs = payload.get('unresolved_refs', []) %}
+
+{% if source and source.get('directives') %}
+{% for directive in source.get('directives', []) %}
+{{ directive.text }}
+{% endfor %}
+
+{% endif %}
+{% set roots = payload.nodes | selectattr('path', 'equalto', '/') | list %}
+{% if roots %}
+{{ render_node(roots[0], payload.nodes, '') }}
+{% endif %}
+
+{% if unresolved_refs %}
+{% for ref in unresolved_refs %}
+
+{% if ref.label %}{{ ref.label }}: {% endif %}{{ ref.reference_syntax }} {
+{{ render_fragment_node(ref.fragment, '    ') }}
+};
+{% endfor %}
+{% endif %}

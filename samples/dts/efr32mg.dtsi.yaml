@@ -1,0 +1,1256 @@
+data:
+  chosen_nodes:
+    zephyr,entropy: /soc/trng@4001d000
+    zephyr,flash-controller: /soc/flash-controller@400e0000
+  compat_index:
+    arm,cortex-m4f:
+    - /cpus/cpu@0
+    mmio-sram:
+    - /memory@20000000
+    silabs,bt-hci-efr32:
+    - /bt_hci_silabs
+    silabs,gecko-flash-controller:
+    - /soc/flash-controller@400e0000
+    silabs,gecko-gpio:
+    - /soc/gpio@4000a400
+    silabs,gecko-gpio-port:
+    - /soc/gpio@4000a400/gpio@4000a000
+    - /soc/gpio@4000a400/gpio@4000a030
+    - /soc/gpio@4000a400/gpio@4000a060
+    - /soc/gpio@4000a400/gpio@4000a090
+    - /soc/gpio@4000a400/gpio@4000a0f0
+    - /soc/gpio@4000a400/gpio@4000a180
+    - /soc/gpio@4000a400/gpio@4000a1b0
+    - /soc/gpio@4000a400/gpio@4000a1e0
+    silabs,gecko-i2c:
+    - /soc/i2c@4000c000
+    - /soc/i2c@4000c400
+    silabs,gecko-leuart:
+    - /soc/leuart@4004a000
+    silabs,gecko-pinctrl:
+    - /pin-controller
+    silabs,gecko-pwm:
+    - /soc/timer@40018000/pwm
+    silabs,gecko-rtcc:
+    - /soc/rtcc@40042000
+    silabs,gecko-timers:
+    - /soc/timer@40018000
+    silabs,gecko-trng:
+    - /soc/trng@4001d000
+    silabs,gecko-usart:
+    - /soc/usart@40010000
+    - /soc/usart@40010400
+    - /soc/usart@40010800
+    - /soc/usart@40010c00
+    silabs,gecko-wdog:
+    - /soc/wdog@40052000
+    - /soc/wdog@40052400
+    soc-nv-flash:
+    - /soc/flash-controller@400e0000/flash@0
+  nodes:
+  - aliases: []
+    binding_path: null
+    children:
+    - /bt_hci_silabs
+    - /chosen
+    - /cpus
+    - /memory@20000000
+    - /pin-controller
+    - /soc
+    compats: []
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: /
+    parent_path: null
+    path: /
+    properties: []
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,bt-hci-efr32
+    depends_on: []
+    labels:
+    - bt_hci_silabs
+    matching_compat: null
+    name: bt_hci_silabs
+    parent_path: /
+    path: /bt_hci_silabs
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,bt-hci-efr32
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats: []
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: chosen
+    parent_path: /
+    path: /chosen
+    properties:
+    - description: null
+      name: zephyr,entropy
+      type: path
+      value: /soc/trng@4001d000
+    - description: null
+      name: zephyr,flash-controller
+      type: path
+      value: /soc/flash-controller@400e0000
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children:
+    - /cpus/cpu@0
+    compats: []
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: cpus
+    parent_path: /
+    path: /cpus
+    properties:
+    - description: null
+      name: '#address-cells'
+      type: num
+      value: 1
+    - description: null
+      name: '#size-cells'
+      type: num
+      value: 0
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - arm,cortex-m4f
+    depends_on: []
+    labels:
+    - cpu0
+    matching_compat: null
+    name: cpu@0
+    parent_path: /cpus
+    path: /cpus/cpu@0
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: arm,cortex-m4f
+    - description: null
+      name: reg
+      type: num
+      value: 0
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - mmio-sram
+    depends_on: []
+    labels:
+    - sram0
+    matching_compat: null
+    name: memory@20000000
+    parent_path: /
+    path: /memory@20000000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: mmio-sram
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-pinctrl
+    depends_on: []
+    labels:
+    - pinctrl
+    matching_compat: null
+    name: pin-controller
+    parent_path: /
+    path: /pin-controller
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-pinctrl
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc/flash-controller@400e0000
+    - /soc/gpio@4000a400
+    - /soc/i2c@4000c000
+    - /soc/i2c@4000c400
+    - /soc/leuart@4004a000
+    - /soc/rtcc@40042000
+    - /soc/timer@40018000
+    - /soc/trng@4001d000
+    - /soc/usart@40010000
+    - /soc/usart@40010400
+    - /soc/usart@40010800
+    - /soc/usart@40010c00
+    - /soc/wdog@40052000
+    - /soc/wdog@40052400
+    compats: []
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: soc
+    parent_path: /
+    path: /soc
+    properties: []
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc/flash-controller@400e0000/flash@0
+    compats:
+    - silabs,gecko-flash-controller
+    depends_on: []
+    labels:
+    - msc
+    matching_compat: null
+    name: flash-controller@400e0000
+    parent_path: /soc
+    path: /soc/flash-controller@400e0000
+    properties:
+    - description: null
+      name: '#address-cells'
+      type: num
+      value: 1
+    - description: null
+      name: '#size-cells'
+      type: num
+      value: 1
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-flash-controller
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 25
+      - 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1074659328
+      - 260
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - soc-nv-flash
+    depends_on: []
+    labels:
+    - flash0
+    matching_compat: null
+    name: flash@0
+    parent_path: /soc/flash-controller@400e0000
+    path: /soc/flash-controller@400e0000/flash@0
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: soc-nv-flash
+    - description: null
+      name: erase-block-size
+      type: num
+      value: 2048
+    - description: null
+      name: write-block-size
+      type: num
+      value: 4
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc/gpio@4000a400/gpio@4000a000
+    - /soc/gpio@4000a400/gpio@4000a030
+    - /soc/gpio@4000a400/gpio@4000a060
+    - /soc/gpio@4000a400/gpio@4000a090
+    - /soc/gpio@4000a400/gpio@4000a0f0
+    - /soc/gpio@4000a400/gpio@4000a180
+    - /soc/gpio@4000a400/gpio@4000a1b0
+    - /soc/gpio@4000a400/gpio@4000a1e0
+    compats:
+    - silabs,gecko-gpio
+    depends_on: []
+    labels:
+    - gpio
+    matching_compat: null
+    name: gpio@4000a400
+    parent_path: /soc
+    path: /soc/gpio@4000a400
+    properties:
+    - description: null
+      name: '#address-cells'
+      type: num
+      value: 1
+    - description: null
+      name: '#size-cells'
+      type: num
+      value: 1
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio
+    - description: null
+      name: interrupt-names
+      type: strings
+      value:
+      - GPIO_EVEN
+      - GPIO_ODD
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 10
+      - 2
+      - 18
+      - 2
+    - description: null
+      name: ranges
+      type: empty
+      value: true
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073783808
+      - 3072
+    required_by: []
+    status: null
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpioa
+    matching_compat: null
+    name: gpio@4000a000
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a000
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073782784
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpiob
+    matching_compat: null
+    name: gpio@4000a030
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a030
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 1
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073782832
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpioc
+    matching_compat: null
+    name: gpio@4000a060
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a060
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 2
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073782880
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpiod
+    matching_compat: null
+    name: gpio@4000a090
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a090
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 3
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073782928
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpiof
+    matching_compat: null
+    name: gpio@4000a0f0
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a0f0
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 5
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073783024
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpioi
+    matching_compat: null
+    name: gpio@4000a180
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a180
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 8
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073783168
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpioj
+    matching_compat: null
+    name: gpio@4000a1b0
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a1b0
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 9
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073783216
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-gpio-port
+    depends_on: []
+    labels:
+    - gpiok
+    matching_compat: null
+    name: gpio@4000a1e0
+    parent_path: /soc/gpio@4000a400
+    path: /soc/gpio@4000a400/gpio@4000a1e0
+    properties:
+    - description: null
+      name: '#gpio-cells'
+      type: num
+      value: 2
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-gpio-port
+    - description: null
+      name: gpio-controller
+      type: empty
+      value: true
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 10
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073783264
+      - 48
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-i2c
+    depends_on: []
+    labels:
+    - i2c0
+    matching_compat: null
+    name: i2c@4000c000
+    parent_path: /soc
+    path: /soc/i2c@4000c000
+    properties:
+    - description: null
+      name: '#address-cells'
+      type: num
+      value: 1
+    - description: null
+      name: '#size-cells'
+      type: num
+      value: 0
+    - description: null
+      name: clock-frequency
+      type: num
+      value:
+      - I2C_BITRATE_STANDARD
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-i2c
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 17
+      - 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073790976
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-i2c
+    depends_on: []
+    labels:
+    - i2c1
+    matching_compat: null
+    name: i2c@4000c400
+    parent_path: /soc
+    path: /soc/i2c@4000c400
+    properties:
+    - description: null
+      name: '#address-cells'
+      type: num
+      value: 1
+    - description: null
+      name: '#size-cells'
+      type: num
+      value: 0
+    - description: null
+      name: clock-frequency
+      type: num
+      value:
+      - I2C_BITRATE_STANDARD
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-i2c
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 42
+      - 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073792000
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-leuart
+    depends_on: []
+    labels:
+    - leuart0
+    matching_compat: null
+    name: leuart@4004a000
+    parent_path: /soc
+    path: /soc/leuart@4004a000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-leuart
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 22
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1074044928
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-rtcc
+    depends_on: []
+    labels:
+    - rtcc0
+    matching_compat: null
+    name: rtcc@40042000
+    parent_path: /soc
+    path: /soc/rtcc@40042000
+    properties:
+    - description: null
+      name: clock-frequency
+      type: num
+      value: 32768
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-rtcc
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 30
+      - 0
+    - description: null
+      name: prescaler
+      type: num
+      value: 1
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1074012160
+      - 388
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc/timer@40018000/pwm
+    compats:
+    - silabs,gecko-timers
+    depends_on: []
+    labels:
+    - timer0
+    matching_compat: null
+    name: timer@40018000
+    parent_path: /soc
+    path: /soc/timer@40018000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-timers
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073840128
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-pwm
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: pwm
+    parent_path: /soc/timer@40018000
+    path: /soc/timer@40018000/pwm
+    properties:
+    - description: null
+      name: '#pwm-cells'
+      type: num
+      value: 3
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-pwm
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-trng
+    depends_on: []
+    labels:
+    - trng0
+    matching_compat: null
+    name: trng@4001d000
+    parent_path: /soc
+    path: /soc/trng@4001d000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-trng
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 49
+      - 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073860608
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-usart
+    depends_on: []
+    labels:
+    - usart0
+    matching_compat: null
+    name: usart@40010000
+    parent_path: /soc
+    path: /soc/usart@40010000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-usart
+    - description: null
+      name: interrupt-names
+      type: strings
+      value:
+      - rx
+      - tx
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 12
+      - 0
+      - 13
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073807360
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-usart
+    depends_on: []
+    labels:
+    - usart1
+    matching_compat: null
+    name: usart@40010400
+    parent_path: /soc
+    path: /soc/usart@40010400
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-usart
+    - description: null
+      name: interrupt-names
+      type: strings
+      value:
+      - rx
+      - tx
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 20
+      - 0
+      - 21
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 1
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073808384
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-usart
+    depends_on: []
+    labels:
+    - usart2
+    matching_compat: null
+    name: usart@40010800
+    parent_path: /soc
+    path: /soc/usart@40010800
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-usart
+    - description: null
+      name: interrupt-names
+      type: strings
+      value:
+      - rx
+      - tx
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 40
+      - 0
+      - 41
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 2
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073809408
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-usart
+    depends_on: []
+    labels:
+    - usart3
+    matching_compat: null
+    name: usart@40010c00
+    parent_path: /soc
+    path: /soc/usart@40010c00
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-usart
+    - description: null
+      name: interrupt-names
+      type: strings
+      value:
+      - rx
+      - tx
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 43
+      - 0
+      - 44
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 3
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1073810432
+      - 1024
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-wdog
+    depends_on: []
+    labels:
+    - wdog0
+    matching_compat: null
+    name: wdog@40052000
+    parent_path: /soc
+    path: /soc/wdog@40052000
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-wdog
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 2
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 0
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1074077696
+      - 44
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - silabs,gecko-wdog
+    depends_on: []
+    labels:
+    - wdog1
+    matching_compat: null
+    name: wdog@40052400
+    parent_path: /soc
+    path: /soc/wdog@40052400
+    properties:
+    - description: null
+      name: compatible
+      type: string
+      value: silabs,gecko-wdog
+    - description: null
+      name: interrupts
+      type: nums
+      value:
+      - 3
+      - 0
+    - description: null
+      name: peripheral-id
+      type: num
+      value: 1
+    - description: null
+      name: reg
+      type: nums
+      value:
+      - 1074078720
+      - 44
+    - description: null
+      name: status
+      type: string
+      value: disabled
+    required_by: []
+    status: disabled
+  source:
+    bindings_dirs: []
+    directives:
+    - line_no: 3
+      target: arm/armv7-m.dtsi
+      text: '#include <arm/armv7-m.dtsi>'
+    - line_no: 4
+      target: zephyr/dt-bindings/gpio/gpio.h
+      text: '#include <zephyr/dt-bindings/gpio/gpio.h>'
+    - line_no: 5
+      target: zephyr/dt-bindings/i2c/i2c.h
+      text: '#include <zephyr/dt-bindings/i2c/i2c.h>'
+    - line_no: 6
+      target: gpio_gecko.h
+      text: '#include "gpio_gecko.h"'
+    - line_no: 7
+      target: zephyr/dt-bindings/pwm/pwm.h
+      text: '#include <zephyr/dt-bindings/pwm/pwm.h>'
+    file_path: samples/dts/efr32mg.dtsi
+    include_path: []
+    workspace_dir: null
+  summary:
+    total_compats: 16
+    total_labels: 27
+    total_nodes: 32
+  unresolved_refs:
+  - fragment:
+      children: []
+      filename: /tmp/tmp4e53e8vr.dts
+      labels: []
+      line_no: 252
+      name: unresolved-ref-0
+      properties:
+        arm,num-irq-priority-bits:
+          labels: []
+          type: num
+          value: 3
+    label: null
+    reference: nvic
+    reference_kind: label
+    reference_syntax: '&nvic'
+format: devicetree-semantic
+generator: build_converter.yaml_converter
+schema_version: v1

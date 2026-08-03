@@ -95,3 +95,48 @@ def test_analyzer_get_kconfig_summary(sample_kconfig_file):
     
     assert "KConfig Analysis Summary" in summary
     assert "options" in summary.lower()
+
+
+def test_analyzer_get_devicetree_summary_empty():
+    """Devicetree summary should be empty message when no parse data exists."""
+    analyzer = Analyzer()
+    summary = analyzer.get_devicetree_summary()
+
+    assert summary == "No Devicetree data available"
+
+
+def test_analyzer_devicetree_summary_and_correlations_with_stub_parser(sample_kconfig_file):
+    """Analyzer should summarize Devicetree data and compute compat correlations."""
+    analyzer = Analyzer(kconfig_file=sample_kconfig_file)
+
+    class StubDevicetreeParser:
+        def parse(self, mode=None):
+            return {
+                "mode": "semantic",
+                "nodes": [
+                    {
+                        "path": "/",
+                        "properties": {},
+                    }
+                ],
+                "labels": ["uart0"],
+                "compat_index": {
+                    "app,debug": ["/test-node"],
+                },
+                "chosen_nodes": {
+                    "zephyr,console": "/test-node",
+                },
+            }
+
+    analyzer.devicetree_parser = StubDevicetreeParser()
+    analyzer.devicetree_mode = "semantic"
+
+    results = analyzer.analyze()
+    dt_summary = analyzer.get_devicetree_summary()
+
+    assert "devicetree" in results
+    assert results["devicetree"]["mode"] == "semantic"
+    assert "kconfig_compatible_matches" in results["correlations"]
+    assert "APP_DEBUG" in results["correlations"]["kconfig_compatible_matches"]
+    assert "Devicetree Analysis Summary" in dt_summary
+    assert "Chosen nodes" in dt_summary

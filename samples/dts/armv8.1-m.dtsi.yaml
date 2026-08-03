@@ -1,0 +1,127 @@
+data:
+  chosen_nodes: {}
+  compat_index:
+    arm,armv8.1m-systick:
+    - /soc/timer@e000e010
+    arm,v8.1m-nvic:
+    - /soc/interrupt-controller@e000e100
+    simple-bus:
+    - /soc
+  nodes:
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc
+    compats: []
+    depends_on: []
+    labels: []
+    matching_compat: null
+    name: /
+    parent_path: null
+    path: /
+    properties: []
+    required_by:
+    - /soc
+    status: okay
+  - aliases: []
+    binding_path: null
+    children:
+    - /soc/interrupt-controller@e000e100
+    - /soc/timer@e000e010
+    compats:
+    - simple-bus
+    depends_on:
+    - /
+    labels: []
+    matching_compat: null
+    name: soc
+    parent_path: /
+    path: /soc
+    properties:
+    - description: ''
+      name: compatible
+      type: string-array
+      value:
+      - simple-bus
+    - description: ''
+      name: ranges
+      type: compound
+      value: null
+    required_by:
+    - /soc/interrupt-controller@e000e100
+    - /soc/timer@e000e010
+    status: okay
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - arm,v8.1m-nvic
+    depends_on:
+    - /soc
+    labels:
+    - nvic
+    matching_compat: null
+    name: interrupt-controller@e000e100
+    parent_path: /soc
+    path: /soc/interrupt-controller@e000e100
+    properties:
+    - description: ''
+      name: compatible
+      type: string-array
+      value:
+      - arm,v8.1m-nvic
+    - description: ''
+      name: interrupt-controller
+      type: boolean
+      value: true
+    - description: ''
+      name: reg
+      type: array
+      value:
+      - 3758153984
+      - 3072
+    required_by: []
+    status: okay
+  - aliases: []
+    binding_path: null
+    children: []
+    compats:
+    - arm,armv8.1m-systick
+    depends_on:
+    - /soc
+    labels:
+    - systick
+    matching_compat: null
+    name: timer@e000e010
+    parent_path: /soc
+    path: /soc/timer@e000e010
+    properties:
+    - description: ''
+      name: compatible
+      type: string-array
+      value:
+      - arm,armv8.1m-systick
+    - description: ''
+      name: reg
+      type: array
+      value:
+      - 3758153744
+      - 16
+    required_by: []
+    status: okay
+  source:
+    bindings_dirs: []
+    directives:
+    - line_no: 7
+      target: skeleton.dtsi
+      text: '#include "skeleton.dtsi"'
+    file_path: samples/dts/armv8.1-m.dtsi
+    include_path: []
+    workspace_dir: null
+  summary:
+    total_compats: 3
+    total_labels: 2
+    total_nodes: 4
+format: devicetree-semantic
+generator: build_converter.yaml_converter
+schema_version: v1
