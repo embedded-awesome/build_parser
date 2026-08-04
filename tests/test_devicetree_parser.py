@@ -7,8 +7,8 @@ import pytest
 from build_converter.devicetree_parser import DevicetreeParser
 
 
-pytest.importorskip("devicetree.dtlib")
-pytest.importorskip("devicetree.edtlib")
+pytest.importorskip("build_converter.devicetree.dtlib")
+pytest.importorskip("build_converter.devicetree.edtlib")
 
 
 def _write(path: Path, content: str) -> None:
@@ -107,6 +107,40 @@ def test_devicetree_parser_semantic_basic_no_bindings(tmp_path: Path):
     assert result["mode"] == "semantic"
     assert "/" in result["node_dict"]
     assert "/serial@40002000" in result["node_dict"]
+    assert result["chosen_nodes"]["zephyr,console"] == "&uart0"
+
+
+def test_devicetree_parser_semantic_prefers_label_reference_syntax(tmp_path: Path):
+    """Semantic references should preserve &label syntax where possible."""
+    dts = tmp_path / "references.dts"
+    _write(
+        dts,
+        """/dts-v1/;
+
+/ {
+    chosen {
+        zephyr,flash-controller = &msc;
+    };
+
+    soc {
+        msc: flash-controller@50030000 {
+            compatible = "vendor,flash";
+            reg = <0x50030000 0x1000>;
+        };
+
+        client@0 {
+            compatible = "vendor,client";
+            flash = <&msc>;
+        };
+    };
+};
+""",
+    )
+
+    parser = DevicetreeParser(str(dts), bindings_dirs=[], default_mode="semantic")
+    result = parser.parse_semantic()
+
+    assert result["chosen_nodes"]["zephyr,flash-controller"] == "&msc"
 
 
 def test_devicetree_parser_unknown_mode_error(tmp_path: Path):

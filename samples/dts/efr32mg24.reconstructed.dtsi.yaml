@@ -1,7 +1,5 @@
 data:
-  chosen_nodes:
-    zephyr,entropy: '&se'
-    zephyr,flash-controller: '&msc'
+  chosen_nodes: {}
   compat_index:
     arm,armv8m-itm:
     - /cpus/cpu@0/itm@e0000000
@@ -126,11 +124,11 @@ data:
     properties:
     - description: null
       name: zephyr,entropy
-      type: path
+      type: phandle
       value: '&se'
     - description: null
       name: zephyr,flash-controller
-      type: path
+      type: phandle
       value: '&msc'
     required_by: []
     status: null
@@ -1039,10 +1037,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1084,10 +1082,10 @@ data:
       value: 1
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1125,10 +1123,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1325,10 +1323,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1374,10 +1372,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1440,6 +1438,10 @@ data:
       value:
       - 50
       - 2
+    - description: null
+      name: phandle
+      type: num
+      value: 15
     - description: null
       name: reg
       type: nums
@@ -1536,10 +1538,10 @@ data:
       value: 1
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -1895,10 +1897,10 @@ data:
       - I2C_BITRATE_STANDARD
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -2184,6 +2186,10 @@ data:
       - 66
       - 3
     - description: null
+      name: phandle
+      type: num
+      value: 14
+    - description: null
       name: reg
       type: nums
       value:
@@ -2215,10 +2221,10 @@ data:
       value: 32768
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -2301,10 +2307,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -2350,10 +2356,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -2395,10 +2401,10 @@ data:
     properties:
     - description: null
       name: clocks
-      type: phandles_and_nums
+      type: bytes
       value:
         hex: 0000000d0000000000000000
-        type: compound
+        type: bytes
     - description: null
       name: compatible
       type: string
@@ -2428,28 +2434,28 @@ data:
   source:
     bindings_dirs: []
     directives:
-    - line_no: 7
+    - line_no: 9
       target: arm/armv8-m.dtsi
       text: '#include <arm/armv8-m.dtsi>'
-    - line_no: 8
+    - line_no: 10
       target: dt-bindings/gpio/gpio.h
       text: '#include <dt-bindings/gpio/gpio.h>'
-    - line_no: 9
+    - line_no: 11
       target: dt-bindings/i2c/i2c.h
       text: '#include <dt-bindings/i2c/i2c.h>'
-    - line_no: 10
+    - line_no: 12
       target: dt-bindings/adc/adc.h
       text: '#include <dt-bindings/adc/adc.h>'
-    - line_no: 11
+    - line_no: 13
       target: dt-bindings/clock/silabs/xg24-clock.h
       text: '#include <dt-bindings/clock/silabs/xg24-clock.h>'
-    - line_no: 12
+    - line_no: 14
       target: dt-bindings/dma/silabs/xg24-dma.h
       text: '#include <dt-bindings/dma/silabs/xg24-dma.h>'
-    - line_no: 13
+    - line_no: 15
       target: freq.h
       text: '#include <freq.h>'
-    file_path: samples/dts/efr32mg24.dtsi
+    file_path: samples/dts/efr32mg24.reconstructed.dtsi
     include_path: []
     workspace_dir: null
   summary:
@@ -2459,9 +2465,9 @@ data:
   unresolved_refs:
   - fragment:
       children: []
-      filename: /tmp/tmps4t7ymak.dts
+      filename: /tmp/tmp0w8p9kp5.dts
       labels: []
-      line_no: 484
+      line_no: 769
       name: unresolved-ref-0
       properties:
         arm,num-irq-priority-bits:

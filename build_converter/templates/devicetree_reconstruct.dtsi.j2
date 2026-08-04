@@ -2,9 +2,16 @@
   Reconstructs DTS/DTSI text from build_converter semantic YAML payload.
   Expected input variable: payload (the document's `data` mapping).
 #}
-{% macro render_cell(item) %}
-{% if item is string %}{{ item }}{% elif item is boolean %}{{ 1 if item else 0 }}{% elif item is none %}0{% else %}{{ item }}{% endif %}
-{% endmacro %}
+{% macro render_cell(item) -%}{% if item is string %}{{ item }}{% elif item is boolean %}{{ 1 if item else 0 }}{% elif item is none %}0{% else %}{{ item }}{% endif %}{%- endmacro %}
+
+{% macro render_cells(value) -%}{%- for item in value -%}{{ render_cell(item) }}{% if not loop.last %} {% endif %}{%- endfor -%}{%- endmacro %}
+
+{% macro render_reference(value) -%}
+{%- if value is string and value.startswith('&') -%}{{ value }}
+{%- elif value is string and value.startswith('/') -%}&{{ '{' }}{{ value }}{{ '}' }}
+{%- else -%}{{ value }}
+{%- endif -%}
+{%- endmacro %}
 
 {% macro render_property(prop, indent) %}
 {% set ptype = prop.type %}
@@ -15,16 +22,22 @@
 {{ indent }}{{ prop.name }} = "{{ value }}";
 {% elif ptype == 'strings' and value is iterable and value is not string %}
 {{ indent }}{{ prop.name }} = {% for item in value %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %};
+{% elif ptype == 'num' and value is iterable and value is not string %}
+{{ indent }}{{ prop.name }} = <{{ render_cells(value) }}>;
 {% elif ptype == 'num' and value is not string %}
 {{ indent }}{{ prop.name }} = <{{ value }}>;
 {% elif ptype == 'nums' and value is iterable and value is not string %}
-{{ indent }}{{ prop.name }} = <{% for item in value %}{{ render_cell(item) }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{{ indent }}{{ prop.name }} = <{{ render_cells(value) }}>;
 {% elif ptype == 'path' and value is string and value.startswith('/') %}
 {{ indent }}{{ prop.name }} = <&{{ '{' }}{{ value }}{{ '}' }}>;
+{% elif ptype == 'path' and value is string and value.startswith('&') %}
+{{ indent }}{{ prop.name }} = <{{ render_reference(value) }}>;
 {% elif ptype == 'phandle' and value is string and value.startswith('/') %}
 {{ indent }}{{ prop.name }} = <&{{ '{' }}{{ value }}{{ '}' }}>;
+{% elif ptype == 'phandle' and value is string and value.startswith('&') %}
+{{ indent }}{{ prop.name }} = <{{ render_reference(value) }}>;
 {% elif ptype == 'phandles' and value is iterable and value is not string %}
-{{ indent }}{{ prop.name }} = <{% for item in value %}&{{ '{' }}{{ item }}{{ '}' }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{{ indent }}{{ prop.name }} = <{% for item in value %}{{ render_reference(item) }}{% if not loop.last %} {% endif %}{% endfor %}>;
 {% elif value is mapping and value.get('type') in ['bytes', 'compound', 'raw'] and value.get('hex') is string %}
 {{ indent }}{{ prop.name }} = {{ format_bytes_hex(value.get('hex')) }};
 {% elif value is none %}
@@ -69,10 +82,12 @@
 {{ indent }}{{ prop_name }} = "{{ value }}";
 {% elif ptype == 'strings' and value is iterable and value is not string %}
 {{ indent }}{{ prop_name }} = {% for item in value %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %};
+{% elif ptype == 'num' and value is iterable and value is not string %}
+{{ indent }}{{ prop_name }} = <{{ render_cells(value) }}>;
 {% elif ptype == 'num' and value is not string %}
 {{ indent }}{{ prop_name }} = <{{ value }}>;
 {% elif ptype == 'nums' and value is iterable and value is not string %}
-{{ indent }}{{ prop_name }} = <{% for item in value %}{{ render_cell(item) }}{% if not loop.last %} {% endif %}{% endfor %}>;
+{{ indent }}{{ prop_name }} = <{{ render_cells(value) }}>;
 {% elif value is mapping and value.get('type') in ['bytes', 'compound', 'raw'] and value.get('hex') is string %}
 {{ indent }}{{ prop_name }} = {{ format_bytes_hex(value.get('hex')) }};
 {% elif value is none %}

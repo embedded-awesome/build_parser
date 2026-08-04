@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import re
-import sys
 import tempfile
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+from .devicetree.dtlib import DT, Type
+from .devicetree.edtlib import EDT
 
 
 class DevicetreeParser:
@@ -82,8 +83,6 @@ class DevicetreeParser:
 
         normalized_source, directives = self._normalize_raw_source(original_source)
         parse_path = self._write_temp_source(normalized_source)
-        DT, Type = self._load_dtlib()
-
         try:
             dt = DT(parse_path, include_path=(), force=True)
         except Exception as exc:
@@ -124,7 +123,6 @@ class DevicetreeParser:
 
     def parse_semantic(self) -> Dict[str, Any]:
         """Parse using devicetree.edtlib for binding-enriched data."""
-        EDT = self._load_edtlib()
         unresolved_refs = self._collect_unresolved_refs(self.file_path)
 
         try:
@@ -172,7 +170,8 @@ class DevicetreeParser:
             "node_dict": node_dict,
             "unresolved_refs": unresolved_refs,
             "chosen_nodes": {
-                name: chosen.path for name, chosen in edt.chosen_nodes.items()
+                name: self._to_ref_syntax(chosen)
+                for name, chosen in edt.chosen_nodes.items()
             },
             "labels": sorted(edt.label2node.keys()),
             "compat_index": {
@@ -195,7 +194,6 @@ class DevicetreeParser:
             return False
 
         node_path = node_match.group(1)
-        DT, _ = self._load_dtlib()
         try:
             dt = DT(parse_path, include_path=(), force=True)
             node = dt.get_node(node_path)
@@ -225,7 +223,6 @@ class DevicetreeParser:
         This path uses dtlib structure data and avoids strict edtlib reg-length
         validation when parent cell metadata is incomplete.
         """
-        DT, Type = self._load_dtlib()
         try:
             dt = DT(parse_path, include_path=(), force=True)
         except Exception as exc:
@@ -290,7 +287,7 @@ class DevicetreeParser:
             chosen = dt.get_node("/chosen")
             for name, prop in chosen.props.items():
                 try:
-                    chosen_nodes[name] = prop.to_path().path
+                    chosen_nodes[name] = self._to_ref_syntax(prop.to_path())
                 except Exception:
                     continue
         except Exception:
@@ -318,7 +315,6 @@ class DevicetreeParser:
 
     def _collect_unresolved_refs(self, parse_path: str) -> List[Dict[str, Any]]:
         """Collect unresolved top-level &label fragments from a DTS source."""
-        DT, Type = self._load_dtlib()
         try:
             dt = DT(parse_path, include_path=(), force=True)
         except Exception:
@@ -391,53 +387,6 @@ class DevicetreeParser:
         for node in nodes:
             labels.extend(node.get("labels", []))
         return labels
-
-    @staticmethod
-    def _prefer_vendored_devicetree() -> None:
-        """Prefer repository-vendored python-devicetree when available."""
-        repo_root = Path(__file__).resolve().parents[2]
-        vendored_src = repo_root / "zephyr" / "scripts" / "dts" / "python-devicetree" / "src"
-
-        vendored_path = str(vendored_src)
-        if not vendored_src.is_dir():
-            return
-
-        if vendored_path in sys.path:
-            sys.path.remove(vendored_path)
-        sys.path.insert(0, vendored_path)
-
-        loaded_module = sys.modules.get("devicetree")
-        loaded_path = Path(getattr(loaded_module, "__file__", "")) if loaded_module else None
-        if loaded_path and vendored_src not in loaded_path.parents:
-            for module_name in list(sys.modules.keys()):
-                if module_name == "devicetree" or module_name.startswith("devicetree."):
-                    del sys.modules[module_name]
-
-    @staticmethod
-    def _load_dtlib():
-        """Import dtlib lazily so package import works without dependency."""
-        DevicetreeParser._prefer_vendored_devicetree()
-        try:
-            from devicetree.dtlib import DT, Type
-        except ImportError as exc:
-            raise ValueError(
-                "devicetree dependency is required for DevicetreeParser. "
-                "Install with: pip install devicetree"
-            ) from exc
-        return DT, Type
-
-    @staticmethod
-    def _load_edtlib():
-        """Import edtlib lazily so package import works without dependency."""
-        DevicetreeParser._prefer_vendored_devicetree()
-        try:
-            from devicetree.edtlib import EDT
-        except ImportError as exc:
-            raise ValueError(
-                "devicetree dependency is required for semantic parsing. "
-                "Install with: pip install devicetree"
-            ) from exc
-        return EDT
 
     def _serialize_dt_node(self, node: Any, type_enum: Any) -> Dict[str, Any]:
         """Serialize a dtlib node to a plain dictionary."""
@@ -515,11 +464,11 @@ class DevicetreeParser:
             elif ptype is type_enum.BYTES:
                 value = {"type": "bytes", "hex": prop.to_bytes().hex()}
             elif ptype is type_enum.PHANDLE:
-                value = prop.to_node().path
+                value = self._to_ref_syntax(prop.to_node())
             elif ptype is type_enum.PHANDLES:
-                value = [node.path for node in prop.to_nodes()]
+                value = [self._to_ref_syntax(node) for node in prop.to_nodes()]
             elif ptype is type_enum.PATH:
-                value = prop.to_path().path
+                value = self._to_ref_syntax(prop.to_path())
             else:
                 # Compound values are intentionally preserved as bytes for now.
                 value = {"type": "compound", "hex": prop.value.hex()}
@@ -548,6 +497,19 @@ class DevicetreeParser:
             return prop.to_nums(signed_aware=True)
         except TypeError:
             return prop.to_nums()
+
+    @staticmethod
+    def _to_ref_syntax(node: Any) -> str:
+        """Format a node reference as &label when available, else &{/path}."""
+        labels = list(getattr(node, "labels", []) or [])
+        if labels:
+            return f"&{labels[0]}"
+
+        path = getattr(node, "path", None)
+        if isinstance(path, str) and path:
+            return f"&{{{path}}}"
+
+        return str(node)
 
     def _serialize_edt_node(self, node: Any) -> Dict[str, Any]:
         """Serialize an edtlib node to a plain dictionary."""
@@ -605,15 +567,12 @@ class DevicetreeParser:
             }
 
         if hasattr(value, "path"):
-            return {
-                "path": value.path,
-                "name": getattr(value, "name", None),
-            }
+            return self._to_ref_syntax(value)
 
         if hasattr(value, "controller") and hasattr(value, "data"):
             controller = getattr(value, "controller", None)
             return {
-                "controller": controller.path if controller else None,
+                "controller": self._to_ref_syntax(controller) if controller else None,
                 "data": self._serialize_semantic_value(value.data),
                 "name": getattr(value, "name", None),
                 "basename": getattr(value, "basename", None),

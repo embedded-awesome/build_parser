@@ -73,13 +73,13 @@ data:
   source:
     bindings_dirs: []
     directives:
-    - line_no: 7
+    - line_no: 9
       target: mem.h
       text: '#include <mem.h>'
-    - line_no: 8
+    - line_no: 10
       target: silabs/efr32mg24.dtsi
       text: '#include <silabs/efr32mg24.dtsi>'
-    file_path: samples/dts/efr32mg24b020f1536im40.dtsi
+    file_path: samples/dts/efr32mg24b020f1536im40.reconstructed.dtsi
     include_path: []
     workspace_dir: null
   summary:
@@ -89,9 +89,9 @@ data:
   unresolved_refs:
   - fragment:
       children: []
-      filename: /tmp/tmpo26r_b8e.dts
+      filename: /tmp/tmpcl5z4zps.dts
       labels: []
-      line_no: 23
+      line_no: 28
       name: unresolved-ref-0
       properties:
         reg:

@@ -4,6 +4,8 @@
 
 
 
+
+
 #include <mem.h>
 #include <silabs/efr32mg24.dtsi>
 

@@ -1,7 +1,7 @@
 data:
   chosen_nodes:
-    zephyr,entropy: /soc/trng@4001d000
-    zephyr,flash-controller: /soc/flash-controller@400e0000
+    zephyr,entropy: '&trng0'
+    zephyr,flash-controller: '&msc'
   compat_index:
     arm,cortex-m4f:
     - /cpus/cpu@0
@@ -104,11 +104,11 @@ data:
     - description: null
       name: zephyr,entropy
       type: path
-      value: /soc/trng@4001d000
+      value: '&trng0'
     - description: null
       name: zephyr,flash-controller
       type: path
-      value: /soc/flash-controller@400e0000
+      value: '&msc'
     required_by: []
     status: null
   - aliases: []
@@ -1238,7 +1238,7 @@ data:
   unresolved_refs:
   - fragment:
       children: []
-      filename: /tmp/tmp4e53e8vr.dts
+      filename: /tmp/tmpeyk0dwpv.dts
       labels: []
       line_no: 252
       name: unresolved-ref-0
